@@ -1,0 +1,15 @@
+{
+    "name": "ganesh/learnvault",
+    "type": "project",
+    "require": {
+        "firebase/php-jwt": "^6.11",
+        "cloudinary/cloudinary_php": "^3.1",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ganesh\\Learnvault\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}

@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+
+body {
+  overflow-x: hidden;
+  font-family: 'Garamond', serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Garamond', serif;
+}
+
+p,
+span,
+.ui-text {
+  font-family: 'Open Sans', sans-serif;
+}
+
+img,
+button,
+button * {
+  user-select: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-drag: none;
+}
+
