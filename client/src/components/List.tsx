@@ -18,6 +18,7 @@ interface bookType {
 
 const List = () => {
   const [books, setBooks] = useState<bookType[] | null>(null)
+  const [viewAll, setViewAll] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -42,7 +43,7 @@ const List = () => {
         <img src='/svg/arrow.svg' alt='Arrow' />
       </div>
       <Suspense fallback={<p>Loading...</p>}>
-        {books?.map((book, i) => (
+        {(viewAll ? books : books?.slice(0, 5))?.map((book, i) => (
           <Book
             key={i}
             title={String(book.title)}
@@ -55,6 +56,15 @@ const List = () => {
           />
         ))}
       </Suspense>
+      {
+        (books && (books?.length > 5)) && (<button
+        className='px-6 py-2 bg-gray-800 text-white rounded-xl shadow active:scale-100 hover:scale-105 hover:bg-gray-700 transition'
+        type='button'
+        onClick={() => setViewAll(prev => !prev)}
+      >
+        {viewAll ? 'Shrink' : 'View All'}
+      </button>)
+      }
     </div>
   )
 }

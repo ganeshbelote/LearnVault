@@ -30,8 +30,8 @@ switch ($uri) {
     case '/api/v1/book':
         if ($method == "GET") {
             BookController::getAllBooks();
-        }else if ($method == "POST") {
-            $user = ensureAuth(); 
+        } else if ($method == "POST") {
+            $user = ensureAuth();
             $email  = $user['email'];
             BookController::upload($email);
         }
@@ -39,6 +39,10 @@ switch ($uri) {
     case '/contribution':
         if ($method == "GET") {
             UserController::contributions();
+        }
+    case '/email':
+        if ($method == "POST") {
+            sendEmail($body);
         }
     default:
         echo '404 Page';

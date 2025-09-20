@@ -105,7 +105,7 @@ const BookForm = ({
           toast.error('You must log in first!')
           setTimeout(() => navigate('/auth/login'), 1500)
         } else {
-          toast.error('Upload failed. Please try again.')
+          toast.error(result.data.error)
           console.log(result)
         }
       }

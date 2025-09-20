@@ -3,8 +3,10 @@
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Cloudinary\Cloudinary;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__. '/../');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 function sendJSON($statusCode = 200, $message = "", $data = [])
@@ -81,7 +83,8 @@ class Token
     }
 }
 
-function ensureAuth() {
+function ensureAuth()
+{
     $token = null;
 
     // 1. Check for cookie
@@ -108,10 +111,47 @@ function ensureAuth() {
         $jwt_secret = $_ENV['JWT_SECRET'];
         $decoded = JWT::decode($token, new Key($jwt_secret, 'HS256'));
         return (array) $decoded;
-
     } catch (Exception $e) {
         sendJSON(401, "Invalid or expired token.", ["error" => $e->getMessage()]);
     }
 }
 
+function sendEmail($input)
+{
+    if (!$input || empty($input['email']) || empty($input['description'])) {
+        sendJSON(400, "Email and description are required", ["ok" => false, "error" => "Email and description are required"]);
+        exit;
+    }
 
+    $userEmail = filter_var($input['email'], FILTER_SANITIZE_EMAIL);
+    $description = htmlspecialchars($input['description'], ENT_QUOTES, 'UTF-8');
+
+    try {
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host       = $_ENV['SMTP_HOST'];
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $_ENV['SMTP_USER'];
+        $mail->Password   = $_ENV['SMTP_PASS'];
+        $mail->SMTPSecure = (strtolower($_ENV['MAIL_ENCRYPTION'] ?? 'tls') === 'ssl')
+            ? PHPMailer::ENCRYPTION_SMTPS
+            : PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = (int)($_ENV['SMTP_PORT'] ?? 587);
+
+        $mail->setFrom($userEmail, "User Query");
+        $mail->addAddress($_ENV['SUPPORT_EMAIL'], 'LearnVault Support');
+        $mail->addReplyTo($userEmail);
+
+        $mail->isHTML(true);
+        $mail->Subject = "New Support Query from {$userEmail}";
+        $mail->Body    = "<h3>User Email:</h3><p>{$userEmail}</p>
+                      <h3>Message:</h3><p>{$description}</p>";
+        $mail->AltBody = "User Email: {$userEmail}\nMessage: {$description}";
+
+        $mail->send();
+
+        sendJSON(200, "Query sent successfully", ["ok" => true, "message" => "Query sent successfully"]);
+    } catch (Exception $e) {
+        sendJSON(500, "Internal server error.", ["ok" => false, "error" => $mail->ErrorInfo]);
+    }
+}
