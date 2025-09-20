@@ -46,6 +46,9 @@ class BookController
 
             $res = uploadFile($targetPath);
             if (!$res['ok']) {
+                if (file_exists($targetPath)) {
+                    unlink($targetPath);
+                }
                 sendJSON(500, "File upload failed.", ["error" => $res['error']]);
             }
             if (file_exists($targetPath)) {
@@ -73,7 +76,10 @@ class BookController
                 "url" => $url
             ]);
         } catch (Exception $e) {
-            sendJSON(500, "❌ Error: " . $e->getMessage());
+            if (file_exists($targetPath)) {
+                unlink($targetPath);
+            }
+            sendJSON(500, "Error: " . $e->getMessage());
         }
     }
 

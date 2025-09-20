@@ -105,7 +105,7 @@ const BookForm = ({
           toast.error('You must log in first!')
           setTimeout(() => navigate('/auth/login'), 1500)
         } else {
-          toast.error(result.data.error)
+          toast.error("File should be under 10MB")
           console.log(result)
         }
       }
