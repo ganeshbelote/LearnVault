@@ -96,4 +96,18 @@ class BookController
             sendJSON(500, "Internal Server Error.", ["error" => $e->getMessage()]);
         }
     }
+
+    public static function getByCondition($body)
+    {
+        try {
+            $res = Book::findByCondtion($body);
+            if (!$res["ok"]) {
+                sendJSON(404, $res["message"], []);
+            }
+
+            sendJSON(200, "Books fetched Successfully.", $res["data"]);
+        } catch (Exception $e) {
+            sendJSON(500, "Internal Server Error.", ["error" => $e->getMessage()]);
+        }
+    }
 }

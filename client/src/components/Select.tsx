@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import Option from './Option'
 import { useEffect, useRef, useState } from 'react'
-import type { SelectProps } from '../types/selectOption.type' 
+import type { SelectProps } from '../types/selectOption.type'
 import { motion } from 'framer-motion'
 
 const Select = ({
@@ -32,6 +32,19 @@ const Select = ({
     }
   }
 
+  const handleNone = (value: string) => {
+    setSelectedIndex(null)
+    setExpand(false)
+
+    if (onChange) {
+      const event = {
+        target: { value } as HTMLSelectElement
+      } as React.ChangeEvent<HTMLSelectElement>
+
+      onChange(event)
+    }
+  }
+
   if (!children)
     return (
       <h2 className='text-2xl text-red-500 font-semibold'>
@@ -45,12 +58,12 @@ const Select = ({
         style={{ minWidth: width }}
         className={clsx(
           'cursor-pointer flex items-center justify-between gap-3 px-4 py-1.5 rounded-md font-medium hover:shadow-[0_0_4px_#ffffff] transition-all duration-300 ease-out border-2',
-          (Color == "white") ? 'bg-black' : 'bg-white'
+          Color == 'white' ? 'bg-black' : 'bg-white'
         )}
         onClick={() => setExpand(prev => !prev)}
       >
         <span className={`max-w-[360px] line-clamp-1 text-${Color}`}>
-          {selectedIndex !== null
+          {selectedIndex !== null && children[selectedIndex]
             ? children[selectedIndex].props.children
             : Title}
         </span>
@@ -108,9 +121,12 @@ const Select = ({
         className={clsx(
           'absolute z-[1] flex flex-col items-center gap-1 w-fit p-2.5 rounded-xl border-2',
           !expand && 'pointer-events-none cursor-not-allowed',
-          (Color == "white") ? 'bg-black' : 'bg-white'
+          Color == 'white' ? 'bg-black' : 'bg-white'
         )}
       >
+        <Option value='' onClick={() => handleNone('')}>
+          None
+        </Option>
         {children.map((el, index) => (
           <Option
             key={index}

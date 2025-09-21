@@ -1,23 +1,29 @@
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense, useContext, useEffect, useState } from 'react'
 import { base_url } from '../utils/Constant'
+import { FileContext } from '../utils/Context'
 const Book = React.lazy(() => import('./Book'))
 
-interface bookType {
-  book_id: number
-  course: string
-  level: string
-  pages_count: number
-  publication: string
-  publish_end_year: number
-  publish_start_year: number
-  semester: number
-  title: string
-  uploaded_by: number | null
-  url: string
-}
+// interface bookType {
+//   book_id: number
+//   course: string
+//   level: string
+//   pages_count: number
+//   publication: string
+//   publish_end_year: number
+//   publish_start_year: number
+//   semester: number
+//   title: string
+//   uploaded_by: number | null
+//   url: string
+// }
 
 const List = () => {
-  const [books, setBooks] = useState<bookType[] | null>(null)
+  const context = useContext(FileContext)
+  if (!context) {
+    throw new Error('FileContext must be used within a FileProvider')
+  }
+  const { books, setBooks } = context
+  // const [books, setBooks] = useState<bookType[] | null>(null)
   const [viewAll, setViewAll] = useState<boolean>(false)
 
   useEffect(() => {
@@ -56,15 +62,15 @@ const List = () => {
           />
         ))}
       </Suspense>
-      {
-        (books && (books?.length > 5)) && (<button
-        className='px-6 py-2 bg-gray-800 text-white rounded-xl shadow active:scale-100 hover:scale-105 hover:bg-gray-700 transition'
-        type='button'
-        onClick={() => setViewAll(prev => !prev)}
-      >
-        {viewAll ? 'Shrink' : 'View All'}
-      </button>)
-      }
+      {books && books?.length > 5 && (
+        <button
+          className='px-6 py-2 bg-gray-800 text-white rounded-xl shadow active:scale-100 hover:scale-105 hover:bg-gray-700 transition'
+          type='button'
+          onClick={() => setViewAll(prev => !prev)}
+        >
+          {viewAll ? 'Shrink' : 'View All'}
+        </button>
+      )}
     </div>
   )
 }

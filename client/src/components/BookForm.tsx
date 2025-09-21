@@ -188,7 +188,7 @@ const BookForm = ({
             }
           >
             <Option value='Nirali'>Nirali</Option>
-            <Option value='vision'>Vision</Option>
+            <Option value='Vision'>Vision</Option>
           </Select>
         </div>
         <div className='semester w-full'>

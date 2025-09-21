@@ -44,6 +44,10 @@ switch ($uri) {
         if ($method == "POST") {
             sendEmail($body);
         }
+    case '/filter':
+        if ($method == "POST") {
+            BookController::getByCondition($body);
+        }
     default:
         echo '404 Page';
         break;
