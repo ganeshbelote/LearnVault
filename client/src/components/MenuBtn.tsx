@@ -14,9 +14,10 @@ export interface MenuBtnProps
   Border?: boolean;
   Size?: SizeKey;
   onToggle?: onToggleType; 
+  active?: boolean;
 }
 
-export type onToggleType = (active: boolean | number) => void | undefined
+export type onToggleType = (active: boolean) => void | undefined
 
 const colorObj = {
   white: 'bg-white',
@@ -35,17 +36,27 @@ const MenuBtn = ({
   className,
   Border = true,
   Size = 'medium',
+  active: controlledActive,
   ...rest
 }: MenuBtnProps) => {
-  const [active, setActive] = useState<boolean>(false)
+  const [uncontrolledActive, setUncontrolledActive] = useState(false);
+
+  // अगर parent ने active दिया है तो वही use होगा
+  const isActive = controlledActive !== undefined ? controlledActive : uncontrolledActive;
 
   const handleClick = () => {
-    setActive(prev => {
-      const newState = !prev
-      onToggle?.(newState)
-      return newState
-    })
-  }
+    if (controlledActive === undefined) {
+      // uncontrolled mode → internal toggle
+      setUncontrolledActive(prev => {
+        const newState = !prev;
+        onToggle?.(newState);
+        return newState;
+      });
+    } else {
+      // controlled mode → सिर्फ parent को notify
+      onToggle?.(!controlledActive);
+    }
+  };
 
   return (
     <div
@@ -65,7 +76,7 @@ const MenuBtn = ({
 
       {/* Background Highlight */}
       <AnimatePresence>
-        {active && (
+        {isActive && (
           <motion.div
             className='absolute inset-0 rounded-md '
             initial={{ opacity: 0 }}
@@ -78,9 +89,9 @@ const MenuBtn = ({
 
       {/* Hamburger → Cross */}
       <motion.div
-        className='relative z-10 flex flex-col items-end justify-center space-y-1.5'
+        className='relative flex flex-col items-end justify-center space-y-1.5'
         initial={false}
-        animate={active ? 'open' : 'closed'}
+        animate={isActive ? 'open' : 'closed'}
       >
         {/* Top Line */}
         <motion.span

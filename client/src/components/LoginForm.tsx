@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import BasicBtn from './Basicbtn'
+import BasicBtn from './BasicBtn'
 import LoadingBtn from './LoadingBtn'
 import type { userType } from '../types/user.type'
 import { base_url } from '../utils/Constant'

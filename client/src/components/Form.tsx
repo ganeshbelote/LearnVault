@@ -59,7 +59,7 @@ const Form = () => {
   }
 
   return (
-    <div className='min-h-100 w-full p-4 flex flex-col gap-5 items-center'>
+    <div id='contact' className='min-h-100 w-full p-4 flex flex-col gap-5 items-center'>
       <div className='rate flex flex-col gap-2 items-center'>
         <h1 className='text-2xl font-semibold text-center'>
           How satisfied are you?

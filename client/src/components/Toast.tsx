@@ -31,7 +31,7 @@ export const Toast = ({
   return (
     <ToastContext.Provider value={{ addToast, removeToast }}>
       {/* Toast container */}
-      <div className={`fixed bottom-5 left-1/2 -translate-x-1/2 space-y-2`}>
+      <div className={`z-50 fixed bottom-5 left-1/2 -translate-x-1/2 space-y-2`}>
         <AnimatePresence>
           {toasts.map(toast => (
             <motion.div

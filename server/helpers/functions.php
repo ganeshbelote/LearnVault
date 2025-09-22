@@ -89,8 +89,8 @@ function ensureAuth()
     $token = null;
 
     // 1. Check for cookie
-    if (isset($_COOKIE['auth_token'])) {
-        $token = $_COOKIE['auth_token'];
+    if (isset($_COOKIE['token'])) {
+        $token = $_COOKIE['token'];
     }
 
     // 2. Check for Authorization header if cookie not found
@@ -112,7 +112,7 @@ function ensureAuth()
         $jwt_secret = $_ENV['JWT_SECRET'];
         $decoded = JWT::decode($token, new Key($jwt_secret, 'HS256'));
         return (array) $decoded;
-    }catch (ExpiredException $e) {
+    } catch (ExpiredException $e) {
         sendJSON(401, "Token expired.", ["error" => $e->getMessage()]);
     } catch (Exception $e) {
         sendJSON(401, "Invalid or expired token.", ["error" => $e->getMessage()]);

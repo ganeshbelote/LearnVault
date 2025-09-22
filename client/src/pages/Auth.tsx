@@ -8,13 +8,13 @@ const Auth = () => {
 
   if (type == 'register') {
     return (
-      <div className='h-screen w-screen overflow-hidden flex items-center justify-center'>
+      <div style={{ backgroundImage : 'url(/images/bg.png)'}} className='bg-cover bg-center bg-no-repeat h-screen w-screen overflow-hidden flex items-center justify-center'>
         <RegisterForm/>
       </div>
     )
   } else if (type == 'login') {
     return (
-      <div className='h-screen w-screen overflow-hidden flex items-center justify-center'>
+      <div style={{ backgroundImage : 'url(/images/bg.png)'}} className='bg-cover bg-center bg-no-repeat h-screen w-screen overflow-hidden flex items-center justify-center'>
         <LoginForm/>
       </div>
     )

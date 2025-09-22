@@ -43,7 +43,7 @@ const Contributers = () => {
           (contributer, i) => (
             <div key={i} className='flex flex-col items-center'>
               <div
-                style={{ backgroundImage: 'url("/profile.png")' }}
+                style={{ backgroundImage: 'url("/svg/person.svg")' }}
                 className='cursor-pointer h-14 w-14 border-2 rounded-full bg-center bg-cover bg-no-repeat'
               ></div>
               <p>{contributer.username}</p>

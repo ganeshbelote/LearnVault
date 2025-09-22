@@ -66,7 +66,7 @@ class UserController
             $token = Token::generateToken($user["user_id"], $user["email"]);
 
             setcookie(
-                "auth_token",
+                "token",
                 $token,
                 [
                     "expires" => time() + (60 * 60 * 24),

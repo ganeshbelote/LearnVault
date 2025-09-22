@@ -16,7 +16,7 @@ const Dashboard = () => {
 
   const { file, setFile, loading, setLoading } = context
   return (
-    <div className='overflow-hidden min-h-screen w-screen flex items-start justify-center'>
+    <div style={{ backgroundImage : 'url(/images/bg.png)'}} className='bg-cover bg-center bg-no-repeat overflow-hidden min-h-screen w-screen flex items-start justify-center'>
       <div className='w-full sm:w-lg md:w-lg lg:w-lg flex flex-col items-center justify-center gap-3'>
         <div className='p-4 pb-2 w-full flex flex-col items-center justify-center gap-3'>
           <Navbar/>

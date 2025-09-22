@@ -20,7 +20,6 @@ const Upload = ({ setFile } : { setFile : React.Dispatch<React.SetStateAction<Fi
     setDragActive(false)
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      console.log('Dropped files:', e.dataTransfer.files)
       setFile(e.dataTransfer.files)
     }
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Option from './Option'
 import Select from './Select'
 import { getPdfPageCount } from '../utils/pageCount'
@@ -26,6 +26,7 @@ const BookForm = ({
   setFile: React.Dispatch<React.SetStateAction<FileList | null>>
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileData, setFileData] = useState<fileDataType | null>({
     title: '',
     level: '',
@@ -56,7 +57,37 @@ const BookForm = ({
     e.preventDefault()
     setLoading(true)
 
-    if (!file?.[0]) return
+    if (!file?.[0]) {
+      toast.error('Please select a file to upload.')
+      setLoading(false)
+      return
+    }
+
+    // 2. Check file size (10 MB = 10 * 1024 * 1024 bytes)
+    if (file[0].size > 10 * 1024 * 1024) {
+      toast.error('File size must not exceed 10 MB.')
+      setLoading(false)
+      return
+    }
+
+    // 3. Check required fields
+    const requiredFields: (keyof fileDataType)[] = [
+      'title',
+      'level',
+      'course',
+      'semester',
+      'publication',
+      'publish_start_year',
+      'publish_end_year'
+    ]
+    for (const field of requiredFields) {
+      if (!fileData?.[field] && fileData?.[field] !== 0) {
+        toast.error(`Field "${field}" is required.`)
+        setLoading(false)
+        return
+      }
+    }
+
     const formData = new FormData()
     formData.append('file', file[0])
     formData.append('title', fileData?.title || '')
@@ -74,6 +105,12 @@ const BookForm = ({
     setFile(null)
 
     const token = localStorage.getItem('token')
+
+    if(!token){
+      toast.error('You must log in first!')
+      setLoading(false)
+      return
+    }
 
     try {
       const response = await fetch(`${base_url}api/v1/book`, {
@@ -97,7 +134,6 @@ const BookForm = ({
         publish_end_year: 0,
         pages_count: 0
       })
-      console.log('Upload result:', result)
       if (response.ok) {
         toast.success('Book uploaded successfully!.')
       } else {
@@ -105,8 +141,7 @@ const BookForm = ({
           toast.error('You must log in first!')
           setTimeout(() => navigate('/auth/login'), 1500)
         } else {
-          toast.error('File should be under 10MB')
-          console.log(result)
+          toast.error(result.message)
         }
       }
     } catch (err) {
@@ -135,13 +170,19 @@ const BookForm = ({
         <button
           type='button'
           className='cancle hover:scale-105 active:scale-95 transition-all duration-300 font-medium absolute right-5 h-5 w-5 rounded-full border-[1px] bg-red-500 flex items-center justify-center'
-          onClick={() => setFile(null)}
+          onClick={() => {
+            setFile(null)
+            if (fileInputRef.current) {
+              fileInputRef.current.value = ''
+            }
+          }}
         >
           x
         </button>
         <h1 className='mb-3 text-2xl font-semibold'>Book Details</h1>
         <div className='file w-full'>
           <input
+            ref={fileInputRef}
             id='file'
             name='file'
             className='ui-text bg-gray-100 outline-0 border-2 py-2 px-4 w-full'
