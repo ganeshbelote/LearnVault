@@ -73,13 +73,13 @@ const BookForm = ({
 
     setFile(null)
 
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
 
     try {
       const response = await fetch(`${base_url}api/v1/book`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         },
         body: formData,
         credentials: 'include'
@@ -105,7 +105,7 @@ const BookForm = ({
           toast.error('You must log in first!')
           setTimeout(() => navigate('/auth/login'), 1500)
         } else {
-          toast.error("File should be under 10MB")
+          toast.error('File should be under 10MB')
           console.log(result)
         }
       }
@@ -121,7 +121,7 @@ const BookForm = ({
         publish_end_year: 0,
         pages_count: 0
       })
-      console.error('Error uploading file:', err)
+      console.log('Error uploading file:', err)
       toast.error('Upload failed. Please try again.')
     }
   }

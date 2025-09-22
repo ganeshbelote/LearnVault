@@ -3,6 +3,7 @@
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Cloudinary\Cloudinary;
+use Firebase\JWT\ExpiredException;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -111,6 +112,8 @@ function ensureAuth()
         $jwt_secret = $_ENV['JWT_SECRET'];
         $decoded = JWT::decode($token, new Key($jwt_secret, 'HS256'));
         return (array) $decoded;
+    }catch (ExpiredException $e) {
+        sendJSON(401, "Token expired.", ["error" => $e->getMessage()]);
     } catch (Exception $e) {
         sendJSON(401, "Invalid or expired token.", ["error" => $e->getMessage()]);
     }

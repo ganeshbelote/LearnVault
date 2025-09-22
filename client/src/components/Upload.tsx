@@ -26,7 +26,6 @@ const Upload = ({ setFile } : { setFile : React.Dispatch<React.SetStateAction<Fi
   }
 
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Uploaded via click:', e.target.files)
     setFile(e.target.files)
   }
 

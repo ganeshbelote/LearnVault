@@ -8,6 +8,7 @@ import List from '../components/List'
 import Footer from '../components/Footer'
 import BookForm from '../components/BookForm'
 import Form from '../components/Form'
+import Navbar from '../components/Navbar'
 
 const Dashboard = () => {
   const context = useContext(FileContext)
@@ -18,6 +19,7 @@ const Dashboard = () => {
     <div className='overflow-hidden min-h-screen w-screen flex items-start justify-center'>
       <div className='w-full sm:w-lg md:w-lg lg:w-lg flex flex-col items-center justify-center gap-3'>
         <div className='p-4 pb-2 w-full flex flex-col items-center justify-center gap-3'>
+          <Navbar/>
           {loading ? <Loader /> : <Upload setFile={setFile} />}
           <Suspense fallback={<p>Loading...</p>}>
             <Contributers />
